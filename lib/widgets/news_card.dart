@@ -22,49 +22,49 @@ class ItemCard extends StatelessWidget {
       child: InkWell(
         // Aksi ketika kartu ditekan.
         onTap: () async {
-          // Memunculkan SnackBar ketika diklik
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!")));
+            ..showSnackBar(
+              SnackBar(
+                content: Text("Kamu telah menekan tombol ${item.name}!"),
+              ),
+            );
 
-          // Navigate ke route yang sesuai (tergantung jenis tombol)
-          if (item.name == "Tambah Berita") {
-            // TODO: Gunakan Navigator.push untuk melakukan navigasi ke MaterialPageRoute yang mencakup NewsFormPage.
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const NewsFormPage()));
-          }
-          else if (item.name == "See Football News") {
+          if (item.name == "Add News") {
+            // ke form tambah berita
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const NewsEntryListPage()
+                builder: (context) => const NewsFormPage(),
               ),
             );
-          }
-          else if (item.name == "Logout") {
-            // TODO: Replace the URL with your app's URL and don't forget to add a trailing slash (/)!
-            // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
-            // If you using chrome,  use URL http://localhost:8000
-
+          } else if (item.name == "See Football News") {
+            // ke halaman list berita
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NewsEntryListPage(),
+              ),
+            );
+          } else if (item.name == "Logout") {
             final response = await request.logout(
-                "http://localhost:8000/auth/logout/");
+              "http://localhost:8000/auth/logout/",
+            );
             String message = response["message"];
+
             if (context.mounted) {
               if (response['status']) {
                 String uname = response["username"];
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("$message See you again, $uname."),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("$message See you again, $uname.")),
+                );
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(message),
-                  ),
+                  SnackBar(content: Text(message)),
                 );
               }
             }
